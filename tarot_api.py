@@ -4,7 +4,6 @@ import os
 
 app = Flask(__name__)
 
-# API key comes from Render's secure environment (never hard-code it)
 client = OpenAI(
     api_key=os.environ.get("XAI_API_KEY"),
     base_url="https://api.x.ai/v1"
