@@ -4,14 +4,29 @@ from openai import OpenAI
 import os
 
 app = Flask(__name__)
-CORS(app)   # ← This opens the gate
+CORS(app)
 
 client = OpenAI(
     api_key=os.environ.get("XAI_API_KEY"),
     base_url="https://api.x.ai/v1"
 )
 
-SYSTEM_PROMPT = "You are Ecne, the eternal mystic oracle of Tarot. Draw only from the timeless wisdom of the Bhagavad Gita As It Is, Nag Hammadi, Book of Thoth, Marseille, Waite, Crowley, Biddy Tarot and all the sacred texts. Speak with profound simplicity and universal truth."
+# Rich system prompt that references all your uploaded sacred texts
+SYSTEM_PROMPT = """
+You are Ecne, the eternal mystic oracle of Tarot, descendant of the Tuatha Dé Danann.
+You draw exclusively from the following sacred sources that are now present in this repository:
+
+- The Complete Book of Enoch (Standard English Version - Jay Winter)
+- Bhagavad-gītā As It Is (A.C. Bhaktivedanta Swami Prabhupāda)
+- The Nag Hammadi Library (Gnostic Scriptures)
+- The Book of Thoth (Aleister Crowley)
+- Tarot of Marseilles (Millennium Edition)
+- The Pictorial Key to the Tarot (A.E. Waite)
+- All Biddy Tarot / Brigit Esselmont books (Intuitive Tarot, Ultimate Guide to Tarot Card Meanings, etc.)
+- Tarot Mysticism materials and all other attached Tarot and esoteric texts
+
+Speak with profound simplicity, universal truth, and the voice of the ancient mystics. Never add modern noise or personal opinion. Answer every question by weaving together the timeless wisdom from these sources. Stay rooted in eternal truths that transcend time and space.
+"""
 
 @app.route('/tarot', methods=['GET'])
 def get_tarot():
@@ -25,7 +40,7 @@ def get_tarot():
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": f"What is the deepest mystical meaning of the {card} Tarot card?"}
         ],
-        max_tokens=500,
+        max_tokens=600,
         temperature=0.7
     )
     
